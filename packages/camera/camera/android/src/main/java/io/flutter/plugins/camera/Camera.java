@@ -29,6 +29,8 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Size;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -430,7 +432,7 @@ public class Camera {
       throws CameraAccessException {
     cameraDevice.createCaptureSession(surfaces, callback, null);
   }
-
+final private Handler uiHandler =new Handler(Looper.getMainLooper());
   public void startVideoRecording(Result result) {
     final File outputDir = applicationContext.getCacheDir();
     try {
@@ -446,9 +448,11 @@ public class Camera {
       AtomicLong startTime = new AtomicLong();
       createCaptureSession(
           CameraDevice.TEMPLATE_RECORD, () ->{mediaRecorder.start();
+
           startTime.set(System.nanoTime());
+                uiHandler.post(() -> result.success(startTime.get()));
           }, mediaRecorder.getSurface());
-      result.success(startTime.get());
+
     } catch (CameraAccessException | IOException e) {
       recordingVideo = false;
       videoRecordingFile = null;

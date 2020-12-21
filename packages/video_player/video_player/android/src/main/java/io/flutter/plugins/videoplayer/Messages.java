@@ -250,7 +250,7 @@ public class Messages {
       return position;
     }
 
-    privat Long nano;
+    private Long nano;
     public  Long getNano(){
       return nano;
     }

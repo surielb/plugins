@@ -32,7 +32,11 @@ dependencies:
   # validation, so we set a ^ constraint.
   # TODO(amirh): Revisit this (either update this part in the  design or the pub tool).
   # https://github.com/flutter/flutter/issues/46264
-  video_player_web: ^2.0.0-nullsafety.1
+  video_player_web:
+  #^2.0.0-nullsafety.1
+    git:
+      url: https://github.com/surielb/plugins.git
+      path: packages/video_player/video_player_web
 
   flutter:
     sdk: flutter

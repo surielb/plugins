@@ -482,7 +482,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       position = const Duration();
     }
     await _videoPlayerPlatform.seekTo(_textureId, position);
-    _updatePosition(position);
+    _updatePosition(TimedDuration(position));
   }
 
   /// Sets the audio volume of [this].
@@ -552,7 +552,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
 
   void _updatePosition(TimedDuration position) {
     value = value.copyWith(position: position.duration, nano: position.nano);
-    value = value.copyWith(caption: _getCaptionAt(position));
+    value = value.copyWith(caption: _getCaptionAt(position.duration));
   }
 }
 
