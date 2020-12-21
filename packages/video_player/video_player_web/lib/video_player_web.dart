@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:html';
-import 'src/shims/dart_ui.dart' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
+
+import 'src/shims/dart_ui.dart' as ui;
 
 // An error code value to error name Map.
 // See: https://developer.mozilla.org/en-US/docs/Web/API/MediaError/code
@@ -130,9 +131,9 @@ class VideoPlayerPlugin extends VideoPlayerPlatform {
   }
 
   @override
-  Future<Duration> getPosition(int textureId) async {
+  Future<TimedDuration> getPosition(int textureId) async {
     _videoPlayers[textureId]!.sendBufferingUpdate();
-    return _videoPlayers[textureId]!.getPosition();
+    return TimedDuration(_videoPlayers[textureId]!.getPosition());
   }
 
   @override

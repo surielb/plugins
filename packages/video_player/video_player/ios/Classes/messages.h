@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FLTPositionMessage : NSObject
 @property(nonatomic, strong, nullable) NSNumber *textureId;
 @property(nonatomic, strong, nullable) NSNumber *position;
+@property(nonatomic, strong, nullable) NSNumber *nano;
+
 @end
 
 @interface FLTMixWithOthersMessage : NSObject

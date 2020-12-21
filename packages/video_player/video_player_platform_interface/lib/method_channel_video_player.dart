@@ -88,10 +88,11 @@ class MethodChannelVideoPlayer extends VideoPlayerPlatform {
   }
 
   @override
-  Future<Duration> getPosition(int textureId) async {
+  Future<TimedDuration> getPosition(int textureId) async {
     PositionMessage response =
         await _api.position(TextureMessage()..textureId = textureId);
-    return Duration(milliseconds: response.position!);
+    return TimedDuration(Duration(milliseconds: response.position!),
+        nano: response.nano);
   }
 
   @override

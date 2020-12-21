@@ -24,6 +24,7 @@ class PlaybackSpeedMessage {
 class PositionMessage {
   int textureId;
   int position;
+  int nano;
 }
 
 class CreateMessage {

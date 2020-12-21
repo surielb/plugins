@@ -167,15 +167,20 @@ static NSDictionary *wrapResult(NSDictionary *result, FlutterError *error) {
     result.textureId = nil;
   }
   result.position = dict[@"position"];
+  result.nano = dict[@"nano"];
   if ((NSNull *)result.position == [NSNull null]) {
     result.position = nil;
   }
+  if ((NSNull *)result.nano == [NSNull null]) {
+      result.nano = nil;
+    }
   return result;
 }
 - (NSDictionary *)toMap {
   return [NSDictionary
       dictionaryWithObjectsAndKeys:(self.textureId ? self.textureId : [NSNull null]), @"textureId",
                                    (self.position ? self.position : [NSNull null]), @"position",
+                                    (self.nano ? self.nano : [NSNull null]), @"nano",
                                    nil];
 }
 @end

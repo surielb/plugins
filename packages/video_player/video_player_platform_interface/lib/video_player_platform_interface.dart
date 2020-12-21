@@ -106,7 +106,7 @@ abstract class VideoPlayerPlatform {
   }
 
   /// Gets the video position as [Duration] from the start.
-  Future<Duration> getPosition(int textureId) {
+  Future<TimedDuration> getPosition(int textureId) {
     throw UnimplementedError('getPosition() has not been implemented.');
   }
 
@@ -127,6 +127,18 @@ abstract class VideoPlayerPlatform {
   // This private method is called by the instance setter, which fails if the class is
   // implemented with `implements`.
   void _verifyProvidesDefaultImplementations() {}
+}
+
+///A duration with a relative nano snapshot
+class TimedDuration {
+  ///the video's duration
+  final Duration duration;
+
+  ///the nano snapshot at the time the duration was reported
+  final int? nano;
+
+  ///Creates a new TimedDuration
+  TimedDuration(this.duration, {this.nano});
 }
 
 /// Description of the data source used to create an instance of

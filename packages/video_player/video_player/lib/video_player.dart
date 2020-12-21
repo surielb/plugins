@@ -11,10 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
 
+import 'src/closed_caption_file.dart';
+
 export 'package:video_player_platform_interface/video_player_platform_interface.dart'
     show DurationRange, DataSourceType, VideoFormat, VideoPlayerOptions;
 
-import 'src/closed_caption_file.dart';
 export 'src/closed_caption_file.dart';
 
 final VideoPlayerPlatform _videoPlayerPlatform = VideoPlayerPlatform.instance
@@ -27,20 +28,20 @@ final VideoPlayerPlatform _videoPlayerPlatform = VideoPlayerPlatform.instance
 class VideoPlayerValue {
   /// Constructs a video with the given values. Only [duration] is required. The
   /// rest will initialize with default values when unset.
-  VideoPlayerValue({
-    required this.duration,
-    this.size = Size.zero,
-    this.position = Duration.zero,
-    this.caption = Caption.none,
-    this.buffered = const <DurationRange>[],
-    this.isInitialized = false,
-    this.isPlaying = false,
-    this.isLooping = false,
-    this.isBuffering = false,
-    this.volume = 1.0,
-    this.playbackSpeed = 1.0,
-    this.errorDescription,
-  });
+  VideoPlayerValue(
+      {required this.duration,
+      this.size = Size.zero,
+      this.position = Duration.zero,
+      this.caption = Caption.none,
+      this.buffered = const <DurationRange>[],
+      this.isInitialized = false,
+      this.isPlaying = false,
+      this.isLooping = false,
+      this.isBuffering = false,
+      this.volume = 1.0,
+      this.playbackSpeed = 1.0,
+      this.errorDescription,
+      this.nano});
 
   /// Returns an instance for a video that hasn't been loaded.
   VideoPlayerValue.uninitialized()
@@ -57,6 +58,9 @@ class VideoPlayerValue {
   ///
   /// The duration is [Duration.zero] if the video hasn't been initialized.
   final Duration duration;
+
+  ///the nano callback matching the [position]
+  final int? nano;
 
   /// The current playback position.
   final Duration position;
@@ -121,6 +125,7 @@ class VideoPlayerValue {
     Duration? duration,
     Size? size,
     Duration? position,
+    int? nano,
     Caption? caption,
     List<DurationRange>? buffered,
     bool? isInitialized,
@@ -135,6 +140,7 @@ class VideoPlayerValue {
       duration: duration ?? this.duration,
       size: size ?? this.size,
       position: position ?? this.position,
+      nano: nano ?? this.nano,
       caption: caption ?? this.caption,
       buffered: buffered ?? this.buffered,
       isInitialized: isInitialized ?? this.isInitialized,
@@ -412,7 +418,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
           if (_isDisposed) {
             return;
           }
-          final Duration? newPosition = await position;
+          final TimedDuration? newPosition = await position;
           if (newPosition == null) {
             return;
           }
@@ -454,7 +460,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   }
 
   /// The position in the current video.
-  Future<Duration?> get position async {
+  Future<TimedDuration?> get position async {
     if (_isDisposed) {
       return null;
     }
@@ -544,8 +550,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     return Caption.none;
   }
 
-  void _updatePosition(Duration position) {
-    value = value.copyWith(position: position);
+  void _updatePosition(TimedDuration position) {
+    value = value.copyWith(position: position.duration, nano: position.nano);
     value = value.copyWith(caption: _getCaptionAt(position));
   }
 }

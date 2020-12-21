@@ -250,6 +250,15 @@ public class Messages {
       return position;
     }
 
+    privat Long nano;
+    public  Long getNano(){
+      return nano;
+    }
+    public void setNano(Long setterArg) {
+      this.nano = setterArg;
+    }
+
+
     public void setPosition(Long setterArg) {
       this.position = setterArg;
     }
@@ -258,6 +267,7 @@ public class Messages {
       HashMap<String, Object> toMapResult = new HashMap<>();
       toMapResult.put("textureId", textureId);
       toMapResult.put("position", position);
+      toMapResult.put("nano", nano);
       return toMapResult;
     }
 
@@ -273,6 +283,12 @@ public class Messages {
           (position == null)
               ? null
               : ((position instanceof Integer) ? (Integer) position : (Long) position);
+      Object nano = map.get("nano");
+      fromMapResult.nano =
+              (nano == null)
+                      ? null
+                      : ((nano instanceof Integer) ? (Integer) nano : (Long) nano);
+
       return fromMapResult;
     }
   }
