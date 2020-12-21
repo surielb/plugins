@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Camera {
   private final SurfaceTextureEntry flutterTexture;
@@ -442,9 +443,12 @@ public class Camera {
     try {
       prepareMediaRecorder(videoRecordingFile.getAbsolutePath());
       recordingVideo = true;
+      AtomicLong startTime = new AtomicLong();
       createCaptureSession(
-          CameraDevice.TEMPLATE_RECORD, () -> mediaRecorder.start(), mediaRecorder.getSurface());
-      result.success(null);
+          CameraDevice.TEMPLATE_RECORD, () ->{mediaRecorder.start();
+          startTime.set(System.nanoTime());
+          }, mediaRecorder.getSurface());
+      result.success(startTime.get());
     } catch (CameraAccessException | IOException e) {
       recordingVideo = false;
       videoRecordingFile = null;
